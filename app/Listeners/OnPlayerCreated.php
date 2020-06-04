@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\PlayerCreated;
 use App\Models\PlayerSkillCards;
+use App\Models\PlayerStats;
 
 class OnPlayerCreated
 {
@@ -43,6 +44,10 @@ class OnPlayerCreated
         ]);
 
         PlayerSkillCards::query()->create([
+            'player_id' => $player->getKey(),
+        ]);
+
+        PlayerStats::query()->create([
             'player_id' => $player->getKey(),
         ]);
     }
