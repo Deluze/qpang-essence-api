@@ -32,9 +32,9 @@ class Register
     /**
      * Register constructor.
      *
-     * @param \Illuminate\Contracts\Routing\ResponseFactory $responseFactory
-     * @param \Illuminate\Hashing\HashManager               $hashManager
-     * @param \Illuminate\Contracts\Config\Repository       $repository
+     * @param  \Illuminate\Contracts\Routing\ResponseFactory $responseFactory
+     * @param  \Illuminate\Hashing\HashManager               $hashManager
+     * @param  \Illuminate\Contracts\Config\Repository       $repository
      */
     public function __construct(ResponseFactory $responseFactory, HashManager $hashManager, Repository $repository)
     {
@@ -65,7 +65,7 @@ class Register
         $user->player()->create([
             'name' => Arr::get($validated, 'nickname'),
             /** Hardcoded for now.. :( */
-            'don'  => 20000,
+            'don'  => 5000,
         ]);
 
         return new UserResource($user);

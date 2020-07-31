@@ -50,5 +50,53 @@ class OnPlayerCreated
         PlayerStats::query()->create([
             'player_id' => $player->getKey(),
         ]);
+
+        $player->items()->create([
+            'item_id'     => 1095172097, // home run king
+            'period_type' => 254,
+            'period'      => 1,
+            'type'        => 87,
+            'opened'      => true,
+            'giftable'    => false,
+            'boosted'     => false,
+            'boost_level' => 0,
+            'time'        => 0,
+        ]);
+
+        $player->items()->create([
+            'item_id'     => 1095303169, // killing field
+            'period_type' => 254,
+            'period'      => 1,
+            'type'        => 87,
+            'opened'      => true,
+            'giftable'    => false,
+            'boosted'     => false,
+            'boost_level' => 0,
+            'time'        => 0,
+        ]);
+
+        $player->items()->create([
+            'item_id'     => 1095368704, // cannon
+            'period_type' => 254,
+            'period'      => 1,
+            'type'        => 87,
+            'opened'      => true,
+            'giftable'    => false,
+            'boosted'     => false,
+            'boost_level' => 0,
+            'time'        => 0,
+        ]);
+
+        $player->items()->create([
+            'item_id'     => 1095434241, // dynamite
+            'period_type' => 254,
+            'period'      => 1,
+            'type'        => 87,
+            'opened'      => true,
+            'giftable'    => false,
+            'boosted'     => false,
+            'boost_level' => 0,
+            'time'        => 0,
+        ]);
     }
 }
