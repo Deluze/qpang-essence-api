@@ -6,6 +6,7 @@ use App\Events\PlayerCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Player extends Model
 {
@@ -58,6 +59,11 @@ class Player extends Model
     public function equipment(): HasMany
     {
         return $this->hasMany(PlayerEquipment::class);
+    }
+
+    public function stats(): HasOne
+    {
+        return $this->hasOne(PlayerStats::class);
     }
 
     /**
