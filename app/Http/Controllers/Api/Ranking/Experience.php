@@ -12,6 +12,6 @@ class Experience
      */
     public function __invoke()
     {
-        return PlayerResource::collection(Player::query()->orderByDesc('experience')->paginate(10));
+        return PlayerResource::collection(Player::query()->orderByDesc('experience')->offset(0)->limit(100)->get());
     }
 }

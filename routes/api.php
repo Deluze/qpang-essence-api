@@ -20,8 +20,6 @@ $router->namespace('Api')->name('api.')->group(function (Router $router) {
 
     $router->namespace('Ranking')->prefix('ranking')->name('ranking.')->group(function (Router $router) {
         $router->get('experience', 'Experience')->name('experience');
-        $router->get('prestige', 'Prestige')->name('prestige');
-        $router->get('playtime', 'PlayTime')->name('playtime');
     });
 
     $router->namespace('Player')->prefix('player')->name('player.')->group(function (Router $router) {
@@ -32,6 +30,7 @@ $router->namespace('Api')->name('api.')->group(function (Router $router) {
     $router->namespace('User')->prefix('user')->name('user.')->group(function (Router $router) {
         $router->get('/', 'Show')->middleware('auth:api');
         $router->post('register', 'Register')->name('register')->middleware('throttle:10,1');
+        $router->post('logout', 'Logout')->middleware('auth:api');
     });
 
     $router->post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken')

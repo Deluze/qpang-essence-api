@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\User;
 
 use App\Http\Requests\Api\RegisterRequest;
 use App\Http\Resources\Api\UserResource;
+use App\Models\RegistrationCode;
 use App\Models\User;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -32,9 +33,9 @@ class Register
     /**
      * Register constructor.
      *
-     * @param  \Illuminate\Contracts\Routing\ResponseFactory $responseFactory
-     * @param  \Illuminate\Hashing\HashManager               $hashManager
-     * @param  \Illuminate\Contracts\Config\Repository       $repository
+     * @param \Illuminate\Contracts\Routing\ResponseFactory $responseFactory
+     * @param \Illuminate\Hashing\HashManager $hashManager
+     * @param \Illuminate\Contracts\Config\Repository $repository
      */
     public function __construct(ResponseFactory $responseFactory, HashManager $hashManager, Repository $repository)
     {
@@ -53,8 +54,20 @@ class Register
 
         $response = $recaptcha->verify($recaptchaResponse, $request->ip());
 
-        if (! $response->isSuccess()) {
+        if (!$response->isSuccess()) {
             return $this->responseFactory->noContent(Response::HTTP_UNAUTHORIZED);
+        }
+
+        $isRegistrationLocked = env('REGISTER_LOCKED');
+        $code = $request->get('code');
+
+        if ($isRegistrationLocked) {
+            /** @var RegistrationCode $registrationCode */
+            $registrationCode = RegistrationCode::query()->where('code', $code)->first();
+
+            if ($registrationCode === null || $registrationCode->user !== null) {
+                return $this->responseFactory->noContent(402);
+            }
         }
 
         Arr::set($validated, 'password', $this->hashManager->make(Arr::get($validated, 'password')));
@@ -65,8 +78,14 @@ class Register
         $user->player()->create([
             'name' => Arr::get($validated, 'nickname'),
             /** Hardcoded for now.. :( */
-            'don'  => 5000,
+            'don' => 5000,
         ]);
+
+        if ($isRegistrationLocked) {
+            RegistrationCode::query()->where('code', $code)->update([
+                'user_id' => $user->getKey(),
+            ]);
+        }
 
         return new UserResource($user);
     }
